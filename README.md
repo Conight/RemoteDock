@@ -100,21 +100,15 @@ Only run this command for builds you trust. It removes Gatekeeper quarantine met
 
 ## OAuth Configuration
 
-Public builds do not ship with third-party cloud OAuth credentials. The relevant Info.plist keys live in `RemoteDock/Resources/Configuration/RemoteDockInfo.plist`:
+RemoteDock does not ship with shared third-party cloud OAuth credentials. For Google Drive, OneDrive, Dropbox, and Box connections, enter your own OAuth Client ID or Client Secret in the New Connection UI when setting up that provider.
 
-- `RemoteDockGoogleOAuthClientID`
-- `RemoteDockOneDriveOAuthClientID`
-- `RemoteDockDropboxOAuthClientID`
-- `RemoteDockBoxOAuthClientID`
-- `RemoteDockBoxOAuthClientSecret`
-
-The OAuth callback scheme is:
+The OAuth callback scheme used by the app is:
 
 ```text
 remotedock://
 ```
 
-To enable the full sign-in flow for cloud-drive protocols, create an app in the relevant provider developer console and inject the Client ID or Client Secret into your local build configuration. Do not commit personal or production credentials to a public repository.
+Create an app in the relevant provider developer console, allow the `remotedock://` callback URL or scheme where required, then paste the generated credentials into RemoteDock's connection form. Do not share personal or production OAuth credentials in public issues.
 
 ## Project Structure
 
