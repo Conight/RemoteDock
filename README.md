@@ -4,19 +4,21 @@ RemoteDock is a native macOS remote file manager for SFTP, WebDAV, object storag
 
 It provides a desktop interface for browsing, transferring, previewing, editing, sharing, and synchronizing files across remote storage providers.
 
+## Download RemoteDock
+
+RemoteDock public builds are available now.
+
+Download the latest version from GitHub Releases:
+
+**[Download RemoteDock](https://github.com/conight/RemoteDock/releases)**
+
+After downloading, move `RemoteDock.app` to `/Applications`.
+
 ## Project Status
 
 RemoteDock is an early-stage vibe coding project. Public builds are available for testing and feedback, but the source code will be opened after the codebase is stable enough to maintain as a public project.
 
 APIs, data models, protocol behavior, and packaging may change between early releases.
-
-## Download
-
-Download the latest public build from the GitHub Releases page:
-
-[github.com/conight/RemoteDock/releases](https://github.com/conight/RemoteDock/releases)
-
-After downloading, move `RemoteDock.app` to `/Applications`.
 
 ## First Launch On macOS
 
