@@ -2,7 +2,11 @@
 
 RemoteDock is a native macOS remote file manager built with SwiftUI and SwiftData. It brings SFTP, WebDAV, object storage, and popular cloud drives into one desktop interface for browsing, transferring, previewing, editing, and synchronizing remote files.
 
-> RemoteDock is still in early development. APIs, data models, and protocol capabilities may change as the project evolves. Before publishing the repository, update the release notes to match your actual release plan.
+## Development Status
+
+RemoteDock is a vibe coding project and is still in early development. Public builds may be shared before the source tree is ready for external contribution; the source code will be opened once the codebase becomes stable enough to maintain in public.
+
+APIs, data models, and protocol capabilities may change as the project evolves.
 
 ## Features
 
@@ -76,9 +80,27 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 xcodebuild test -project RemoteDock.xcodeproj -scheme RemoteDock -destination 'platform=macOS'
 ```
 
+## Installing Downloaded Builds
+
+If you install a downloaded build and macOS reports that `RemoteDock.app` is damaged or cannot be opened, the app bundle may still have Apple's quarantine attribute attached.
+
+After moving the app to `/Applications`, you can remove the quarantine attribute with:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/RemoteDock.app
+```
+
+Then open the app again from Finder or run:
+
+```bash
+open /Applications/RemoteDock.app
+```
+
+Only run this command for builds you trust. It removes Gatekeeper quarantine metadata from this app bundle; it does not sign, notarize, or verify the app for you.
+
 ## OAuth Configuration
 
-The open source version does not ship with third-party cloud OAuth credentials. The relevant Info.plist keys live in `RemoteDock/Resources/Configuration/RemoteDockInfo.plist`:
+Public builds do not ship with third-party cloud OAuth credentials. The relevant Info.plist keys live in `RemoteDock/Resources/Configuration/RemoteDockInfo.plist`:
 
 - `RemoteDockGoogleOAuthClientID`
 - `RemoteDockOneDriveOAuthClientID`
@@ -124,7 +146,7 @@ RemoteDockUITests/             UI tests
 
 ## Contributing
 
-Issues and pull requests are welcome. Good first areas for contribution include:
+Feedback and issue reports are welcome while the project is stabilizing. Once the source code is public, good first areas for contribution include:
 
 - Implementing protocol drivers that are currently modeled but unavailable
 - Adding real-service integration tests or mock-server coverage
