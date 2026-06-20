@@ -1,31 +1,63 @@
 # RemoteDock
 
-RemoteDock is a native macOS remote file manager built with SwiftUI and SwiftData. It brings SFTP, WebDAV, object storage, and popular cloud drives into one desktop interface for browsing, transferring, previewing, editing, and synchronizing remote files.
+RemoteDock is a native macOS remote file manager for SFTP, WebDAV, object storage, and cloud drives.
 
-## Development Status
+It provides a desktop interface for browsing, transferring, previewing, editing, sharing, and synchronizing files across remote storage providers.
 
-RemoteDock is a vibe coding project and is still in early development. Public builds may be shared before the source tree is ready for external contribution; the source code will be opened once the codebase becomes stable enough to maintain in public.
+## Project Status
 
-APIs, data models, and protocol capabilities may change as the project evolves.
+RemoteDock is an early-stage vibe coding project. Public builds are available for testing and feedback, but the source code will be opened after the codebase is stable enough to maintain as a public project.
+
+APIs, data models, protocol behavior, and packaging may change between early releases.
+
+## Download
+
+Download the latest public build from the GitHub Releases page:
+
+[github.com/conight/RemoteDock/releases](https://github.com/conight/RemoteDock/releases)
+
+After downloading, move `RemoteDock.app` to `/Applications`.
+
+## First Launch On macOS
+
+Early builds may not be notarized. If macOS reports that `RemoteDock.app` is damaged or cannot be opened after installation, the app bundle may still have Apple's quarantine attribute attached.
+
+Only run the following command for a build you downloaded from a source you trust:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/RemoteDock.app
+```
+
+Then open the app again:
+
+```bash
+open /Applications/RemoteDock.app
+```
+
+This command removes Gatekeeper quarantine metadata from the app bundle. It does not sign, notarize, or verify the app.
+
+## Requirements
+
+- macOS 26.5 or later for current builds
+- A Mac with network access to the remote services you want to connect to
+- Your own credentials for each remote server or cloud provider
 
 ## Features
 
-- Native macOS windowing, sidebar navigation, menu commands, and Quick Look previews
+- Native macOS interface with sidebar navigation, menu commands, toolbar actions, and Quick Look previews
 - Bookmark management, connection history, Quick Connect, and path navigation
 - Remote directory browsing with list and outline views
 - Uploads, downloads, folder transfers, configurable parallel transfers, and transfer history
 - Create, rename, move, copy, and delete remote files or folders
-- Download and open files, download files for editing, and upload edited copies back to the remote
-- Remote-to-local, local-to-remote, and mirror synchronization plans
-- Recursive search, directory size calculation, general file information, and custom metadata for selected protocols
-- Temporary download URLs for S3, Google Cloud Storage, Azure Blob Storage, and Backblaze B2
-- Provider-managed download URLs and shared links for OneDrive, Google Drive, Dropbox, and Box
+- Download files for local editing and upload edited copies back to the remote
+- Remote-to-local, local-to-remote, and mirror synchronization workflows
+- Recursive search, directory size calculation, file information, and selected custom metadata support
+- Temporary download URLs for supported object storage providers
+- Provider-managed download URLs and shared links for supported cloud drives
 - RemoteDock bookmark import/export and Cyberduck `.duck` bookmark import/export
 - Passwords, OAuth tokens, access keys, and other secrets stored in the macOS Keychain
 
 ## Supported Connections
-
-The New Connection screen currently exposes these implemented drivers:
 
 | Type | Authentication | Notes |
 | --- | --- | --- |
@@ -36,123 +68,46 @@ The New Connection screen currently exposes these implemented drivers:
 | Google Cloud Storage | Access key | Supports bucket/prefix paths |
 | Azure Blob Storage | Access key | Supports container/prefix paths |
 | Backblaze B2 | Access key | Supports bucket/prefix paths |
-| OneDrive | OAuth | Requires an OAuth Client ID |
-| Google Drive | OAuth | Requires an OAuth Client ID |
-| Dropbox | OAuth | Requires an OAuth Client ID |
-| Box | OAuth | Requires an OAuth Client ID/Secret |
+| OneDrive | OAuth | Requires your own OAuth Client ID |
+| Google Drive | OAuth | Requires your own OAuth Client ID |
+| Dropbox | OAuth | Requires your own OAuth Client ID |
+| Box | OAuth | Requires your own OAuth Client ID and Client Secret |
 | Local Disk | macOS folder permission | Useful for local browsing and workflow testing |
 
-The codebase also keeps protocol enums and Cyberduck mappings for FTP, FTPS, SMB, OpenStack Swift, DRACOON, and other legacy surfaces, but those protocols are not currently shown in the New Connection list and still need driver implementations.
+FTP, FTPS, SMB, OpenStack Swift, DRACOON, and other legacy surfaces are represented in parts of the internal model, but they are not currently available in the New Connection UI.
 
-## Requirements
+## OAuth Setup
 
-- macOS; the current Xcode project deployment target is `macOS 26.5`
-- A full Xcode installation with support for Swift 6, SwiftUI, and SwiftData
-- Swift Package dependencies resolved automatically by Xcode
+RemoteDock does not ship with shared OAuth credentials for third-party cloud providers.
 
-External Swift Package dependencies:
+For Google Drive, OneDrive, Dropbox, and Box:
 
-- `swift-nio`
-- `swift-nio-ssh`
-- `swift-crypto`
-
-## Quick Start
-
-Clone the repository:
-
-```bash
-git clone https://github.com/<your-org>/RemoteDock.git
-cd RemoteDock
-```
-
-Open the project in Xcode:
-
-```bash
-open RemoteDock.xcodeproj
-```
-
-Select the `RemoteDock` scheme in Xcode, wait for Swift Package resolution to finish, then run the macOS app target.
-
-For command-line builds or tests, make sure `xcode-select` points to a full Xcode installation instead of Command Line Tools:
-
-```bash
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-xcodebuild test -project RemoteDock.xcodeproj -scheme RemoteDock -destination 'platform=macOS'
-```
-
-## Installing Downloaded Builds
-
-If you install a downloaded build and macOS reports that `RemoteDock.app` is damaged or cannot be opened, the app bundle may still have Apple's quarantine attribute attached.
-
-After moving the app to `/Applications`, you can remove the quarantine attribute with:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/RemoteDock.app
-```
-
-Then open the app again from Finder or run:
-
-```bash
-open /Applications/RemoteDock.app
-```
-
-Only run this command for builds you trust. It removes Gatekeeper quarantine metadata from this app bundle; it does not sign, notarize, or verify the app for you.
-
-## OAuth Configuration
-
-RemoteDock does not ship with shared third-party cloud OAuth credentials. For Google Drive, OneDrive, Dropbox, and Box connections, enter your own OAuth Client ID or Client Secret in the New Connection UI when setting up that provider.
-
-The OAuth callback scheme used by the app is:
+1. Create an app in the provider's developer console.
+2. Configure the app to allow the RemoteDock callback scheme where required:
 
 ```text
 remotedock://
 ```
 
-Create an app in the relevant provider developer console, allow the `remotedock://` callback URL or scheme where required, then paste the generated credentials into RemoteDock's connection form. Do not share personal or production OAuth credentials in public issues.
+3. Open RemoteDock.
+4. Create a new connection for the provider.
+5. Paste your OAuth Client ID or Client Secret into the fields shown in the New Connection UI.
 
-## Project Structure
-
-```text
-RemoteDock/
-  App/                         App entry point, window lifecycle, and menu commands
-  Domain/                      Protocol, authentication, transfer, and bookmark models
-  Features/
-    Browser/                   Main browser UI, file actions, dialogs, and toolbar
-    Connections/               New/edit connection UI
-    Settings/                  Settings UI
-  Infrastructure/
-    Providers/                 SFTP, WebDAV, object storage, and cloud-drive drivers
-    Security/                  Keychain and OAuth support
-  Resources/
-    Assets/                    App icon and color assets
-    Configuration/             Entitlements and Info.plist
-  Services/                    Connection, transfer, sync, bookmark, and preview services
-RemoteDockTests/               Unit tests
-RemoteDockUITests/             UI tests
-```
+Do not share personal or production OAuth credentials in public issues, screenshots, or support requests.
 
 ## Security Notes
 
 - RemoteDock bookmark exports do not include passwords, tokens, secrets, or Keychain references.
 - Bookmark import rejects RemoteDock/Cyberduck files that contain sensitive fields.
 - Local folders, private keys, and known_hosts files use macOS security-scoped bookmarks for permission management.
-- When opening public issues, do not paste access keys, OAuth tokens, credential-bearing URLs, or private file paths.
+- Credentials are stored through the macOS Keychain.
+- Public issues should not include access keys, OAuth tokens, credential-bearing URLs, or private file paths.
 
-## Contributing
+## Source Availability
 
-Feedback and issue reports are welcome while the project is stabilizing. Once the source code is public, good first areas for contribution include:
+The source code is planned to be opened after the codebase stabilizes. Until then, GitHub Releases are the primary distribution channel for public builds.
 
-- Implementing protocol drivers that are currently modeled but unavailable
-- Adding real-service integration tests or mock-server coverage
-- Improving OAuth setup documentation for each provider console
-- Improving sync conflict handling, transfer recovery, and large-directory performance
-- Adding GitHub Actions CI, release scripts, and signing/notarization workflows
-
-Before submitting a PR, run:
-
-```bash
-xcodebuild test -project RemoteDock.xcodeproj -scheme RemoteDock -destination 'platform=macOS'
-```
+Feedback, bug reports, and compatibility notes are welcome through GitHub Issues.
 
 ## License
 
