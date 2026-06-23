@@ -6,13 +6,17 @@ It provides a desktop interface for browsing, transferring, previewing, editing,
 
 ## Download RemoteDock
 
-RemoteDock public builds are available now.
-
-Download the latest version from GitHub Releases:
+RemoteDock public builds are available now from GitHub Releases.
 
 **[Download RemoteDock](https://github.com/conight/RemoteDock/releases)**
 
-After downloading, move `RemoteDock.app` to `/Applications`.
+Install the app:
+
+1. Download the latest release.
+2. Move `RemoteDock.app` to `/Applications`.
+3. Open RemoteDock from Finder or Launchpad.
+
+If macOS reports that `RemoteDock.app` is damaged or cannot be opened, see [First Launch on macOS](#first-launch-on-macos).
 
 ## Project Status
 
@@ -20,9 +24,9 @@ RemoteDock is an early-stage vibe coding project. Public builds are available fo
 
 APIs, data models, protocol behavior, and packaging may change between early releases.
 
-## First Launch On macOS
+## First Launch on macOS
 
-Early builds may not be notarized. If macOS reports that `RemoteDock.app` is damaged or cannot be opened after installation, the app bundle may still have Apple's quarantine attribute attached.
+Early builds may not be notarized. If macOS blocks the app after installation, the app bundle may still have Apple's quarantine attribute attached.
 
 Only run the following command for a build you downloaded from a source you trust:
 
@@ -36,7 +40,7 @@ Then open the app again:
 open /Applications/RemoteDock.app
 ```
 
-This command removes Gatekeeper quarantine metadata from the app bundle. It does not sign, notarize, or verify the app.
+This command removes Gatekeeper quarantine metadata from the app bundle. It does not sign, notarize, or verify the app. If Terminal reports a permission error, run the same command with `sudo`.
 
 ## Requirements
 
