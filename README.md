@@ -12,9 +12,10 @@ RemoteDock public builds are available now from GitHub Releases.
 
 Install the app:
 
-1. Download the latest release.
-2. Move `RemoteDock.app` to `/Applications`.
-3. Open RemoteDock from Finder or Launchpad.
+1. Download the latest `.dmg` release.
+2. Double-click the disk image to mount it.
+3. In the DMG Finder window, drag `RemoteDock.app` onto the `Applications` shortcut.
+4. Open RemoteDock from Finder or Launchpad.
 
 If macOS reports that `RemoteDock.app` is damaged or cannot be opened, see [First Launch on macOS](#first-launch-on-macos).
 
@@ -23,6 +24,18 @@ If macOS reports that `RemoteDock.app` is damaged or cannot be opened, see [Firs
 RemoteDock is an early-stage vibe coding project. Public builds are available for testing and feedback, but the source code will be opened after the codebase is stable enough to maintain as a public project.
 
 APIs, data models, protocol behavior, and packaging may change between early releases.
+
+## Release Packaging
+
+Create a drag-to-Applications disk image:
+
+```bash
+Scripts/create-dmg.sh
+```
+
+The script builds a Release archive, creates a drag-to-Applications DMG containing `RemoteDock.app` and an `Applications` shortcut, and applies the Finder window layout users see after mounting the disk image.
+
+For public distribution outside the Mac App Store, use a Developer ID signed build and notarize the final DMG with Apple before publishing it.
 
 ## First Launch on macOS
 
